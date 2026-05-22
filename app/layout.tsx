@@ -9,7 +9,8 @@ import logo from "./assets/images/logo/Austro Web-N-Logo-Header.png";
 import AosProvider from "./components/AosProvider";
 import CustomCursor from "./components/CustomCursor";
 import InteractionLayer from "./components/InteractionLayer";
-import { contact, navItems, serviceMenuItems, site } from "./content";
+import SiteHeader from "./components/SiteHeader";
+import { contact, serviceMenuItems, site } from "./content";
 
 const display = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -85,28 +86,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <InteractionLayer />
         <CustomCursor />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-        <header className="site-header">
-          <Link href="/" className="brand" aria-label="Austro Web & Logo home">
-            <Image src={logo} alt="Austro Web N Logo" className="brand-logo" priority />
-          </Link>
-          <nav aria-label="Main navigation">
-            {navItems.map((item) => (
-              item.label === "Services" ? (
-                <div className="nav-dropdown" key={item.href}>
-                  <Link href={item.href}>{item.label}</Link>
-                  <div className="services-menu" aria-label="Services submenu">
-                    {serviceMenuItems.map((service) => (
-                      <Link href={service.href} key={service.href}>{service.label}</Link>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <Link href={item.href} key={item.href}>{item.label}</Link>
-              )
-            ))}
-          </nav>
-          <Link href="/contact" className="quote-link">Start a Project</Link>
-        </header>
+        <SiteHeader />
         {children}
         <footer className="footer">
           <div className="footer-brand-row" data-aos="fade-up">

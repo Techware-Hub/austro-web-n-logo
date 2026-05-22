@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="base" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d20"/>
+      <stop offset="52%" stop-color="#111a3e"/>
+      <stop offset="100%" stop-color="#0a0f27"/>
+    </linearGradient>
+    <radialGradient id="gBlue" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#3b4ee6" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#3b4ee6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="gPurple" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#7d4dd6" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#7d4dd6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="gOrange" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#e8913c" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#e8913c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="gCyan" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#25c2d6" stop-opacity="0.62"/>
+      <stop offset="100%" stop-color="#25c2d6" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blur" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="55"/>
+    </filter>
+    <pattern id="dots" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="1.7" fill="#ffffff" fill-opacity="0.5"/>
+    </pattern>
+    <radialGradient id="dotFadeGrad" cx="86%" cy="24%" r="58%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="55%" stop-color="#ffffff"/>
+      <stop offset="80%" stop-color="#7d7d7d"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+    <mask id="dotMask">
+      <rect width="1600" height="1000" fill="url(#dotFadeGrad)"/>
+    </mask>
+    <radialGradient id="lineFadeGrad" cx="82%" cy="16%" r="54%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+    <mask id="lineMask">
+      <rect width="1600" height="1000" fill="url(#lineFadeGrad)"/>
+    </mask>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#base)"/>
+
+  <ellipse cx="430" cy="710" rx="540" ry="430" fill="url(#gBlue)" filter="url(#blur)"/>
+  <ellipse cx="70" cy="20" rx="360" ry="320" fill="url(#gOrange)" filter="url(#blur)"/>
+  <ellipse cx="1580" cy="1030" rx="470" ry="410" fill="url(#gCyan)" filter="url(#blur)"/>
+  <ellipse cx="1260" cy="210" rx="360" ry="330" fill="url(#gPurple)" filter="url(#blur)"/>
+
+  <rect width="1600" height="1000" fill="url(#dots)" mask="url(#dotMask)" opacity="0.5"/>
+
+  <g mask="url(#lineMask)" fill="none" stroke="#aab4ff" stroke-opacity="0.16">
+    <g stroke-width="1.4">
+      <line x1="980" y1="-80" x2="1720" y2="660"/>
+      <line x1="1120" y1="-80" x2="1860" y2="660"/>
+      <line x1="1260" y1="-80" x2="2000" y2="660"/>
+    </g>
+    <circle cx="1330" cy="250" r="150" stroke-width="1.3"/>
+    <circle cx="1330" cy="250" r="270" stroke-width="1.1"/>
+    <circle cx="1330" cy="250" r="400" stroke-width="1"/>
+  </g>
+</svg>
