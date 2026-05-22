@@ -1,11 +1,13 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BadgeCheck, MessageCircle, MousePointer2, Sparkles, Zap } from "lucide-react";
+import { ArrowRight, BadgeCheck, Check, Clapperboard, Globe, Headphones, MapPin, MousePointer2, Palette, PenTool, Quote, Rocket, Smartphone, Sparkles, Star, TrendingUp, Wallet, Zap } from "lucide-react";
 import type { CSSProperties } from "react";
 import { useEffect, useRef } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
+import FAQSection from "./FAQSection";
 import {
   siAfterpay,
   siFigma,
@@ -25,7 +27,8 @@ import {
   siZapier,
   type SimpleIcon
 } from "simple-icons";
-import { packages, services } from "../content";
+import { faqs, homeCapabilities, homeServices, packages, testimonials, whyChooseUs } from "../content";
+import { portfolioItems } from "../portfolio/portfolioData";
 
 const brandTools: Array<{ label: string; icon: SimpleIcon }> = [
   { label: "Figma", icon: siFigma },
@@ -46,8 +49,11 @@ const brandTools: Array<{ label: string; icon: SimpleIcon }> = [
   { label: "Zapier", icon: siZapier }
 ];
 
-const logoWall = brandTools.slice(0, 10);
+const logoPortfolio = portfolioItems.filter((item) => item.category === "Logo Design").slice(-6);
 const proof = ["Logo concepts in days", "Websites built to convert", "Automation that follows up", "Local SEO foundations"];
+const animatedServices = ["Logo Design", "Website Design", "Branding", "Digital Solutions"];
+const capabilityIcons = [PenTool, Globe, Smartphone, Clapperboard];
+const whyIcons = [Palette, MapPin, Rocket, TrendingUp, Wallet, Headphones];
 
 export default function HighEnergyHome() {
   const shell = useRef<HTMLElement>(null);
@@ -55,10 +61,7 @@ export default function HighEnergyHome() {
     Autoplay({ delay: 1200, stopOnInteraction: false, stopOnMouseEnter: true })
   ]);
   const [serviceSliderRef] = useEmblaCarousel({ loop: false, align: "start", dragFree: true });
-  const [logoSliderRef] = useEmblaCarousel({ loop: true, align: "start", dragFree: true }, [
-    Autoplay({ delay: 1600, stopOnInteraction: false, stopOnMouseEnter: true })
-  ]);
-  const [priceSliderRef] = useEmblaCarousel({ loop: false, align: "start", dragFree: true });
+  const featuredPackages = packages[0].items.slice(0, 3);
 
   useEffect(() => {
     const root = shell.current;
@@ -84,20 +87,22 @@ export default function HighEnergyHome() {
   return (
     <main className="kinetic-site" ref={shell}>
       <section className="kinetic-hero">
-        <video className="hero-video" autoPlay muted loop playsInline poster="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=80">
-          <source src="/assets/austro-command-loop.webm" type="video/webm" />
-        </video>
-        <div className="cursor-glow" />
         <div className="hero-orbit orbit-one">Logo</div>
         <div className="hero-orbit orbit-two">Web</div>
         <div className="hero-orbit orbit-three">Automation</div>
-        <div className="hero-content">
+        <div className="hero-content" data-aos="fade-up">
           <p className="eyebrow">Australian agency. Global production power.</p>
-          <h1>Brands, websites and automations that move.</h1>
-          <p className="lead">Web Design Melbourne businesses trust, Logo Design Australia-wide, and Business Automation VIC operators rely on. Built for SMEs, startups and tradies who want the full launch engine.</p>
+          <h1>Australia’s leading web and logo design company.</h1>
+          <p className="typewriter-line" aria-label="Services we provide">
+            <span>Premium </span>
+            <span className="typewriter-words">
+              {animatedServices.map((service) => <b key={service}>{service}</b>)}
+            </span>
+          </p>
+          <p className="lead">Have bespoke, high-converting websites and professional logo design created to increase your brand presence, credibility and sales.</p>
           <div className="button-row">
-            <Link className="button primary" href="/contact">Get a Free Quote <ArrowRight size={18} /></Link>
-            <Link className="button electric" href="/portfolio">Watch the Work Move <Sparkles size={18} /></Link>
+            <Link className="button primary" href="/contact">Get a Free Consultation <ArrowRight size={18} /></Link>
+            <Link className="button electric" href="/portfolio">See Our Work <Sparkles size={18} /></Link>
           </div>
           <div className="tool-dock" aria-label="Creative and production tools">
             {brandTools.slice(0, 5).map(({ label, icon }) => <BrandMark key={label} label={label} icon={icon} />)}
@@ -125,14 +130,14 @@ export default function HighEnergyHome() {
       </section>
 
       <section className="mission-cinematic">
-        <div className="sticky-copy">
+        <div className="sticky-copy" data-aos="fade-up">
           <p className="eyebrow">Mission</p>
-          <h2>We build brands that perform.</h2>
-          <p>A website should earn its keep. A logo should do more than look pretty. We specialise in joining the two: design that converts, branding that lasts, and automation that scales the business behind it.</p>
+          <h2>We’re on a mission to build brands that perform.</h2>
+          <p>Austro Web & Logo helps businesses expand through strategic web design, distinctive logo production, brand systems, and information-driven digital advertising.</p>
         </div>
         <div className="motion-stack">
           {proof.map((item, index) => (
-            <article className="motion-card" key={item} style={{ "--i": index } as CSSProperties}>
+            <article className="motion-card" key={item} style={{ "--i": index } as CSSProperties} data-aos="fade-up" data-aos-delay={String(index * 80)}>
               <BadgeCheck size={24} />
               <h3>{item}</h3>
               <p>{["Identity", "Build", "Flow", "Rank"][index]} layer locked before launch.</p>
@@ -142,14 +147,15 @@ export default function HighEnergyHome() {
       </section>
 
       <section className="service-reel">
-        <div className="section-heading left">
+        <div className="section-heading left" data-aos="fade-up">
           <p className="eyebrow">Services</p>
-          <h2>Everything you need to launch, sell and follow up.</h2>
+          <h2>Our professional digital and design services.</h2>
+          <p>We offer the full scope of creative, development, and marketing services that help businesses launch, scale, and shine in a competitive market.</p>
         </div>
         <div className="embla service-embla" ref={serviceSliderRef}>
         <div className="reel-track embla-track">
-          {services.map(([title, text], index) => (
-            <Link href="/services" className="reel-card" key={title}>
+          {homeServices.map(({ title, text, slug }, index) => (
+            <Link href={`/services/${slug}`} className="reel-card" key={title} data-aos="zoom-in" data-aos-delay={String((index % 4) * 70)}>
               <span>{String(index + 1).padStart(2, "0")}</span>
               <h3>{title}</h3>
               <p>{text}</p>
@@ -159,78 +165,185 @@ export default function HighEnergyHome() {
         </div>
       </section>
 
-      <section className="automation-theatre">
-        <div>
-          <p className="eyebrow">Business automation VIC</p>
-          <h2>Missed calls, slow quotes and forgotten follow-ups get engineered out.</h2>
-          <p>Lead capture, SMS replies, booking nudges, quote-to-invoice flows and review requests, designed around how Australian operators actually work.</p>
-          <Link className="button primary" href="/services">Explore Automation <ArrowRight size={18} /></Link>
+      <section className="capabilities-section">
+        <div className="section-heading" data-aos="fade-up">
+          <p className="eyebrow">What we build</p>
+          <h2>Specialised design and development capabilities.</h2>
+          <p>From custom logos to full digital products, our team delivers focused expertise across every service Australian businesses need to grow.</p>
         </div>
-        <div className="video-shell">
-          <video autoPlay muted loop playsInline>
-            <source src="/assets/austro-automation-loop.webm" type="video/webm" />
+        <div className="capability-grid">
+          {homeCapabilities.map((capability, index) => {
+            const Icon = capabilityIcons[index];
+            return (
+              <article className="capability-card" key={capability.title} data-aos="fade-up" data-aos-delay={String((index % 2) * 90)}>
+                <span className="capability-icon">{Icon ? <Icon size={26} /> : null}</span>
+                <h3>{capability.title}</h3>
+                <p>{capability.text}</p>
+                <ul className="capability-types">
+                  {capability.types.map((type) => <li key={type}><Check size={15} />{type}</li>)}
+                </ul>
+                <Link className="capability-link" href={capability.href}>Learn more <ArrowRight size={16} /></Link>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="automation-theatre">
+        <div data-aos="fade-up">
+          <p className="eyebrow">Business automation VIC</p>
+          <h2>The solutions that are most professional for your business.</h2>
+          <p>Whether you need to launch, scale, or rebrand, our team helps your brand look modern, measure performance, and stand out in a competitive market.</p>
+          <Link className="button primary" href="/services">Explore Services <ArrowRight size={18} /></Link>
+        </div>
+        <div className="reason-video-col" data-aos="fade-left">
+          <video className="reason-video" autoPlay muted loop playsInline>
+            <source src="/assets/video/reason.mp4" type="video/mp4" />
           </video>
         </div>
       </section>
 
       <section className="logo-lab">
-        <div className="section-heading">
+        <div className="section-heading" data-aos="fade-up">
           <p className="eyebrow">Logo portfolio energy</p>
-          <h2>Identity systems made to travel.</h2>
-          <p>Utes, uniforms, invoices, socials, websites, booking pages. Your brand needs to work everywhere your customer meets you.</p>
+          <h2>Check our inspiring logo design portfolio.</h2>
+          <p>We take pride in creative designs crafted for clients over the years, reflecting our dedication to excellence and memorable brand identity.</p>
         </div>
-        <div className="embla logo-wall-slider" ref={logoSliderRef}>
-        <div className="logo-wall embla-track">
-          {[...logoWall, ...logoWall].map(({ label, icon }, index) => (
-            <div className="logo-tile" key={`${label}-${index}`}>
-              <BrandMark label={label} icon={icon} />
-              <span>{label}</span>
-            </div>
+        <div className="portfolio-grid">
+          {logoPortfolio.map((item, index) => (
+            <article className="portfolio-card" key={`${item.category}-${item.title}`} data-aos="fade-up" data-aos-delay={String((index % 3) * 80)}>
+              <Image src={item.image} alt={item.alt} width={640} height={480} />
+              <div className="portfolio-overlay">
+                <span>{item.category}</span>
+                <h3>{item.title}</h3>
+              </div>
+            </article>
           ))}
         </div>
+        <div className="logo-section-cta" data-aos="fade-up">
+          <Link className="button primary" href="/portfolio">View Full Portfolio <ArrowRight size={18} /></Link>
         </div>
       </section>
 
       <section className="pricing-stage">
-        <div className="section-heading left">
+        <div className="section-heading left" data-aos="fade-up">
           <p className="eyebrow">Fixed-price launch paths</p>
-          <h2>Packages with movement, not mystery.</h2>
+          <h2>Borderline pricing plans for all businesses.</h2>
+          <p>Select a package aligned with your business objectives and budget.</p>
         </div>
-        <div className="embla pricing-embla" ref={priceSliderRef}>
-        <div className="pricing-river embla-track">
-          {packages.flatMap((group) => group.items.slice(0, 2)).map(([name, price, desc]) => (
-            <Link href="/packages" className="price-chip" key={name as string}>
-              <strong>{price}</strong>
-              <span>{name}</span>
-              <p>{desc}</p>
-            </Link>
-          ))}
+        <div className="packages-grid">
+          {featuredPackages.map((item, index) => {
+            const recommended = item.name === "Logo Plus";
+            return (
+              <article className={`pricing-card ${recommended ? "recommended" : ""}`} key={item.name} data-aos="fade-up" data-aos-delay={String((index % 3) * 90)}>
+                {recommended && <span className="recommended-badge"><Sparkles size={15} /> Recommended</span>}
+                <div className="pricing-card-head">
+                  <h3>{item.name}</h3>
+                  <div className="package-price-row">
+                    <strong>{item.price}</strong>
+                    <span><s>{item.originalPrice}</s></span>
+                  </div>
+                </div>
+                <ul>
+                  {item.features.slice(0, 5).map((feature) => <li key={feature}><Check size={16} />{feature}</li>)}
+                </ul>
+                <div className="package-actions">
+                  <Link className="button primary" href="/contact">Order Now <ArrowRight size={18} /></Link>
+                </div>
+              </article>
+            );
+          })}
         </div>
+        <div className="featured-packages-more" data-aos="fade-up">
+          <Link className="button primary" href="/packages">View More Packages <ArrowRight size={18} /></Link>
+        </div>
+      </section>
+
+      <section className="why-choose-section">
+        <div className="section-heading" data-aos="fade-up">
+          <p className="eyebrow">Why choose us</p>
+          <h2>Reasons Australian businesses prefer us.</h2>
+          <p>We provide high-quality design and digital solutions that help Australian businesses grow faster — backed by professional expertise, transparent processes, and outstanding customer service on every project.</p>
+        </div>
+        <div className="why-grid">
+          {whyChooseUs.map((reason, index) => {
+            const Icon = whyIcons[index];
+            return (
+              <article className="why-card" key={reason.title} data-aos="fade-up" data-aos-delay={String((index % 3) * 80)}>
+                <span className="why-icon">{Icon ? <Icon size={24} /> : null}</span>
+                <h3>{reason.title}</h3>
+                <p>{reason.text}</p>
+              </article>
+            );
+          })}
+        </div>
+        <div className="why-cta" data-aos="fade-up">
+          <Link className="button primary" href="/contact">Get Started Now <ArrowRight size={18} /></Link>
         </div>
       </section>
 
       <section className="impact-video">
         <div className="impact-frame">
-          <video autoPlay muted loop playsInline>
-            <source src="/assets/austro-command-loop.webm" type="video/webm" />
-          </video>
-          <div>
+          <div className="impact-copy" data-aos="fade-right">
             <MousePointer2 size={34} />
-            <h2>Make an impact before the first scroll ends.</h2>
-            <p>High-converting sites, original logo systems, launch content and automation, built as one connected production.</p>
+            <h2>Crafted with precision, built for performance.</h2>
+            <p>Browse web designs, logos, branding, and digital work created to help businesses build stronger visibility and credibility.</p>
+          </div>
+          <div className="impact-visual" data-aos="fade-left">
+            <Image src="/assets/services/website/Powerful%20&%20Future-Prospective%20Web%20designs.png" alt="Web design, branding, and digital work crafted by Austro Web and Logo" width={640} height={520} />
           </div>
         </div>
       </section>
 
-      <section className="cta kinetic-cta">
-        <h2>Ready to build something worth visiting?</h2>
-        <p>Tell us what you're up to and we'll come back within one business day with ideas, timelines and a fixed price.</p>
-        <Link className="button primary" href="/contact">Get a Free Quote <ArrowRight size={18} /></Link>
+      <section className="testimonials-section">
+        <div className="section-heading" data-aos="fade-up">
+          <p className="eyebrow">Client stories</p>
+          <h2>What our clients say.</h2>
+          <p>We&apos;re proud to partner with businesses across Australia, helping them grow through strong design and digital solutions.</p>
+        </div>
+        <div className="testimonial-grid">
+          {testimonials.map((testimonial, index) => (
+            <article className="testimonial-card" key={testimonial.name} data-aos="fade-up" data-aos-delay={String(index * 90)}>
+              <Quote className="testimonial-quote-mark" size={30} />
+              <div className="testimonial-stars" aria-label="Rated 5 out of 5">
+                {[0, 1, 2, 3, 4].map((star) => <Star key={star} size={16} fill="currentColor" />)}
+              </div>
+              <p className="testimonial-quote">{testimonial.quote}</p>
+              <div className="testimonial-author">
+                <span className="testimonial-avatar" aria-hidden="true">
+                  {testimonial.name.split(" ").map((part) => part[0]).join("")}
+                </span>
+                <div>
+                  <strong>{testimonial.name}</strong>
+                  <span>{testimonial.role}</span>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
       </section>
 
-      <Link href="/contact" className="floating-chat" aria-label="Start an enquiry">
-        <MessageCircle size={24} />
-      </Link>
+      <section className="make-impact" data-aos="zoom-in">
+        <p className="eyebrow">Stand out</p>
+        <h2>Make an impact with a unique logo from a leading design agency.</h2>
+        <p>Want a distinctive logo for your business? Our designers will craft a custom logo that properly represents your brand and attracts customers — with exclusive discounts on every logo design project.</p>
+        <Link className="button primary" href="/contact">Start Creating <Sparkles size={18} /></Link>
+      </section>
+
+      <section className="cta kinetic-cta">
+        <h2>Ready to build your brand? Let’s get started.</h2>
+        <p>If you want to discuss a new project, ask a question, or share feedback, we’re here and happy to listen.</p>
+        <Link className="button primary" href="/contact">Get Started Now <ArrowRight size={18} /></Link>
+      </section>
+
+      <FAQSection
+        className="home-faq"
+        eyebrow="Questions"
+        title="Frequently Asked Questions"
+        intro="Quick answers about our logo design, website development, branding, digital marketing, mobile apps, print design, graphic design, packages, and process."
+        faqs={faqs}
+      />
+
       <div className="scroll-pulse"><Zap size={16} /> Scroll</div>
     </main>
   );

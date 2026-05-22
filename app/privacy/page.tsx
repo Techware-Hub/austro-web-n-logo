@@ -1,7 +1,9 @@
 import { contact } from "../content";
 
 export const metadata = {
-  title: "Privacy Policy | Austro Web & Logo"
+  title: "Privacy Policy",
+  description: "Read the Austro Web & Logo privacy policy, including how enquiry, project, website usage, and contact information may be handled.",
+  alternates: { canonical: "/privacy" }
 };
 
 export default function PrivacyPage() {
