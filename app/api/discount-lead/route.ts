@@ -70,12 +70,13 @@ export async function POST(request: Request) {
 
   const missing = REQUIRED_ENV.filter((key) => !process.env[key]);
   if (missing.length) {
-    if (isDev) console.error("[discount-lead] missing env:", missing.join(", "));
+    console.error("[discount-lead] missing env:", missing.join(", "));
     return NextResponse.json(
       {
         success: false,
-        message: "Email service is not configured.",
-        error: `Missing environment variables: ${missing.join(", ")}`
+        message:
+          "Email service is not configured yet. Please contact us directly at info@austrowebnlogo.com.",
+        ...(isDev ? { error: `Missing environment variables: ${missing.join(", ")}` } : {})
       },
       { status: 500 }
     );
@@ -136,9 +137,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, message: "Lead submitted successfully." });
   } catch (error) {
     const detail = safeError(error);
-    if (isDev) console.error("[discount-lead] sendMail failed:", detail);
+    console.error("[discount-lead] sendMail failed:", detail);
     return NextResponse.json(
-      { success: false, message: "Failed to send email.", error: detail },
+      {
+        success: false,
+        message:
+          "We couldn't send your request right now. Please try again or contact us directly at info@austrowebnlogo.com.",
+        ...(isDev ? { error: detail } : {})
+      },
       { status: 502 }
     );
   }
