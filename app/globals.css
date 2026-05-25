@@ -3754,3 +3754,267 @@ address {
     grid-template-columns: 1fr;
   }
 }
+
+/* --- Discount popup --- */
+.discount-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9500;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: color-mix(in oklch, oklch(5% 0.04 276) 78%, transparent);
+  backdrop-filter: blur(8px);
+  animation: discountOverlayIn 240ms ease-out;
+}
+
+.discount-dialog {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  width: min(960px, 100%);
+  max-height: calc(100dvh - 40px);
+  color: var(--paper);
+  background:
+    radial-gradient(circle at 0% 0%, color-mix(in oklch, var(--brand) 32%, transparent), transparent 50%),
+    radial-gradient(circle at 100% 100%, color-mix(in oklch, oklch(74% 0.13 205) 28%, transparent), transparent 55%),
+    linear-gradient(145deg, oklch(14% 0.07 276), oklch(10% 0.05 276));
+  border: 1px solid color-mix(in oklch, var(--paper) 16%, transparent);
+  border-radius: 24px;
+  box-shadow:
+    0 32px 90px color-mix(in oklch, oklch(4% 0.04 276) 70%, transparent),
+    0 0 0 1px color-mix(in oklch, var(--accent) 22%, transparent),
+    0 0 60px color-mix(in oklch, var(--brand) 35%, transparent);
+  overflow: hidden;
+  animation: discountDialogIn 320ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.discount-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  color: var(--paper);
+  background: color-mix(in oklch, oklch(8% 0.04 276) 70%, transparent);
+  border: 1px solid color-mix(in oklch, var(--paper) 18%, transparent);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 200ms ease-out, border-color 200ms ease-out;
+}
+
+.discount-close:hover,
+.discount-close:focus-visible {
+  background: color-mix(in oklch, var(--orange) 52%, transparent);
+  border-color: color-mix(in oklch, var(--orange) 70%, transparent);
+}
+
+.discount-art {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  background: linear-gradient(160deg, oklch(13% 0.075 276), oklch(8% 0.04 276));
+  border-right: 1px solid color-mix(in oklch, var(--paper) 12%, transparent);
+}
+
+.discount-art-image {
+  width: 100%;
+  height: auto;
+  max-width: 360px;
+  border-radius: 18px;
+  object-fit: contain;
+}
+
+.discount-body {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding: clamp(22px, 3vw, 36px);
+  overflow-y: auto;
+}
+
+.discount-eyebrow {
+  margin: 0;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.discount-body h2 {
+  margin: 0;
+  font-size: clamp(1.4rem, 2.6vw, 1.85rem);
+  line-height: 1.15;
+}
+
+.discount-subtitle {
+  margin: 0;
+  color: oklch(86% 0.022 88);
+  font-size: 0.98rem;
+}
+
+.discount-offer {
+  margin: 0;
+  color: oklch(78% 0.024 86);
+  font-size: 0.92rem;
+}
+
+.discount-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.discount-form label {
+  display: grid;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: oklch(82% 0.022 86);
+}
+
+.discount-form-full {
+  grid-column: 1 / -1;
+}
+
+.discount-form input,
+.discount-form select,
+.discount-form textarea {
+  width: 100%;
+  padding: 11px 13px;
+  color: var(--paper);
+  background: color-mix(in oklch, oklch(7% 0.04 276) 68%, transparent);
+  border: 1px solid color-mix(in oklch, var(--paper) 16%, transparent);
+  border-radius: 10px;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 500;
+  transition: border-color 180ms ease-out, background 180ms ease-out;
+}
+
+.discount-form input:focus,
+.discount-form select:focus,
+.discount-form textarea:focus {
+  outline: none;
+  border-color: color-mix(in oklch, var(--accent) 70%, transparent);
+  background: color-mix(in oklch, oklch(6% 0.04 276) 80%, transparent);
+}
+
+.discount-form textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+
+.discount-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.discount-later {
+  padding: 10px 18px;
+  color: oklch(82% 0.022 86);
+  background: transparent;
+  border: 1px solid color-mix(in oklch, var(--paper) 18%, transparent);
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 200ms ease-out, color 200ms ease-out;
+}
+
+.discount-later:hover {
+  color: var(--paper);
+  background: color-mix(in oklch, var(--paper) 8%, transparent);
+}
+
+.discount-submit {
+  min-height: 44px;
+}
+
+.discount-submit[disabled],
+.discount-later[disabled] {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.discount-error {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 10px 12px;
+  color: oklch(80% 0.16 30);
+  background: color-mix(in oklch, oklch(40% 0.18 30) 22%, transparent);
+  border: 1px solid color-mix(in oklch, oklch(60% 0.18 30) 55%, transparent);
+  border-radius: 10px;
+  font-size: 0.88rem;
+}
+
+.discount-success {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  padding: 12px 4px;
+  text-align: center;
+}
+
+.discount-success-mark {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  color: var(--accent);
+  background: color-mix(in oklch, var(--accent) 18%, transparent);
+  border: 1px solid color-mix(in oklch, var(--accent) 50%, transparent);
+  border-radius: 50%;
+}
+
+@keyframes discountOverlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes discountDialogIn {
+  from { opacity: 0; transform: translateY(20px) scale(.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (max-width: 760px) {
+  .discount-dialog {
+    grid-template-columns: 1fr;
+    max-height: calc(100dvh - 24px);
+  }
+
+  .discount-art {
+    padding: 18px;
+    border-right: 0;
+    border-bottom: 1px solid color-mix(in oklch, var(--paper) 12%, transparent);
+  }
+
+  .discount-art-image {
+    max-width: 220px;
+  }
+
+  .discount-form {
+    grid-template-columns: 1fr;
+  }
+
+  .discount-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .discount-later,
+  .discount-submit {
+    width: 100%;
+    justify-content: center;
+  }
+}

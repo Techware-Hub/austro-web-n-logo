@@ -39,7 +39,11 @@ export default function ContactPage() {
             <article className="contact-info-card" key={title} data-aos="fade-up" data-aos-delay={String(index * 80)}>
               <Icon size={24} />
               <h2>{title}</h2>
-              <p>{value}</p>
+              <p>
+                {title === "Phone" ? <a href={`tel:${contact.phoneTel}`}>{value}</a>
+                  : title === "Email" ? <a href={`mailto:${value}`}>{value}</a>
+                  : value}
+              </p>
               <span>{detail}</span>
             </article>
           ))}
@@ -64,7 +68,7 @@ export default function ContactPage() {
           </label>
           <label>Tell us about your project<textarea name="message" rows={6} placeholder="Share your goals, timeline, budget range, or package preference." /></label>
           <button className="button primary" type="submit">Send Enquiry <ArrowRight size={18} /></button>
-          <p className="form-note">Thanks, we have got your enquiry. You will hear from us soon. If it is urgent, call {contact.phone}.</p>
+          <p className="form-note">Thanks, we have got your enquiry. You will hear from us soon. If it is urgent, call <a href={`tel:${contact.phoneTel}`}>{contact.phone}</a>.</p>
         </form>
 
         <aside className="contact-map-card" data-aos="fade-left">
