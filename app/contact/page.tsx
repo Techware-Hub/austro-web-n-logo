@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import ContactForm from "../components/ContactForm";
 import FAQSchema from "../components/FAQSchema";
 import FAQSection from "../components/FAQSection";
 import PageHero from "../components/PageHero";
@@ -51,25 +52,7 @@ export default function ContactPage() {
       </section>
 
       <section className="contact-premium-layout">
-        <form className="contact-form premium-contact-form" id="contact-form" data-aos="fade-right">
-          <div className="form-heading">
-            <p className="eyebrow">Project enquiry</p>
-            <h2>Tell us what you need.</h2>
-          </div>
-          <label>Full Name *<input name="name" placeholder="Your full name" required /></label>
-          <label>Email Address *<input name="email" type="email" placeholder="you@example.com" required /></label>
-          <label>Phone<input name="phone" placeholder="04xx xxx xxx or 0x xxxx xxxx" /></label>
-          <label>Business Name<input name="business" placeholder="Your business name" /></label>
-          <label>Suburb / State<input name="location" placeholder="Melbourne, VIC" /></label>
-          <label>What can we help with?
-            <select name="service" defaultValue="Logo Design">
-              {["Logo Design", "Web Design", "Mobile Apps", "Digital Marketing", "Branding", "Graphic Design", "Print", "Other"].map((item) => <option key={item}>{item}</option>)}
-            </select>
-          </label>
-          <label>Tell us about your project<textarea name="message" rows={6} placeholder="Share your goals, timeline, budget range, or package preference." /></label>
-          <button className="button primary" type="submit">Send Enquiry <ArrowRight size={18} /></button>
-          <p className="form-note">Thanks, we have got your enquiry. You will hear from us soon. If it is urgent, call <a href={`tel:${contact.phoneTel}`}>{contact.phone}</a>.</p>
-        </form>
+        <ContactForm />
 
         <aside className="contact-map-card" data-aos="fade-left">
           <div>

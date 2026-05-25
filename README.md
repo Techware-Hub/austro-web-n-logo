@@ -37,9 +37,14 @@ These local Codex skills were used during development and are recommended when c
 
 The `.agents/` folder is intentionally ignored, so install or add those skills locally instead of committing them to the repository.
 
-## Discount Popup Email Setup
+## Form Email Setup (Contact + Discount Popup)
 
-The discount popup posts to `app/api/discount-lead/route.ts`, which uses Nodemailer over SMTP to deliver leads to `info@austrowebnlogo.com`. The route reads SMTP credentials from these environment variables:
+Two forms send leads to `info@austrowebnlogo.com` over SMTP:
+
+- Contact page form → `POST /api/contact` (`app/api/contact/route.ts`)
+- Discount popup → `POST /api/discount-lead` (`app/api/discount-lead/route.ts`)
+
+Both routes use the shared helper at [lib/sendEmail.ts](lib/sendEmail.ts), so they always share the same SMTP transport, env handling and error semantics. They read SMTP credentials from these environment variables:
 
 | Variable | Purpose | Example |
 | --- | --- | --- |
@@ -87,8 +92,26 @@ After adding the variables:
 ### Error UX
 
 - In production, users see a friendly message: *"Email service is not configured yet. Please contact us directly at info@austrowebnlogo.com."* and SMTP failures show *"We couldn't send your request right now. Please try again or contact us directly at info@austrowebnlogo.com."*
-- In development the popup additionally surfaces the underlying technical detail (missing variable name or SMTP error) so misconfigurations are obvious during local testing.
+- In development the popup and contact form additionally surface the underlying technical detail (missing variable name or SMTP error) so misconfigurations are obvious during local testing.
 - Server-side `console.error` logs always include the full detail so production server logs remain useful for debugging.
+- The contact form only renders the success banner *after* the API returns `success: true`. A failed send never silently shows "Thanks" — it shows the friendly error and keeps the form contents in place.
+
+### Dev-only diagnostic endpoint
+
+A read-only debug route is available **only when `NODE_ENV !== "production"`**:
+
+```
+GET /api/debug-email
+```
+
+It returns JSON with `smtpConfigured`, `smtpVerified` (runs `transporter.verify()`), `missingVars`, the active host/port/secure/user/from/receiver settings, and the underlying error string when verification fails. **`SMTP_PASS` is never included in the response.** In production this route returns `404`. Delete the route file if you do not want it in your repo.
+
+### Hostinger / production gotchas
+
+- **Environment variables must be set in the hosting panel, then the app restarted/redeployed.** `.env.example` is documentation only and is not loaded at runtime.
+- Use the actual mailbox password for `SMTP_PASS` — Hostinger does not issue separate "app passwords" the way Gmail does.
+- Port 465 → `SMTP_SECURE=true` (implicit TLS). Port 587 → `SMTP_SECURE=false` (STARTTLS).
+- If a submission still fails after env vars are set, check the server log for the `[contact] sendMail failed:` or `[discount-lead] sendMail failed:` line — that exact message comes from the SMTP server.
 
 ## Notes
 

@@ -1588,6 +1588,22 @@ textarea {
   color: oklch(80% 0.02 88);
 }
 
+.form-note-success {
+  padding: 12px 14px;
+  color: oklch(86% 0.12 154);
+  background: color-mix(in oklch, oklch(40% 0.16 154) 20%, transparent);
+  border: 1px solid color-mix(in oklch, oklch(60% 0.16 154) 55%, transparent);
+  border-radius: 10px;
+}
+
+.form-note-error {
+  padding: 12px 14px;
+  color: oklch(82% 0.16 30);
+  background: color-mix(in oklch, oklch(40% 0.18 30) 22%, transparent);
+  border: 1px solid color-mix(in oklch, oklch(60% 0.18 30) 55%, transparent);
+  border-radius: 10px;
+}
+
 .contact-map-card {
   align-self: start;
   display: grid;
