@@ -3,9 +3,15 @@
 import Image from "next/image";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Sparkles, X } from "lucide-react";
+import { useDiscountPopup } from "./PopupProvider";
 
 const STORAGE_KEY = "austro_discount_popup_seen";
 const SHOW_DELAY_MS = 6500;
+const isDev = process.env.NODE_ENV !== "production";
+const SUCCESS_MESSAGE =
+  "Thank you! Your request has been submitted successfully. Our team will contact you shortly.";
+const GENERIC_ERROR =
+  "Something went wrong. Please try again or contact us directly at info@austrowebnlogo.com.";
 
 const serviceOptions = [
   "Logo Design",
@@ -29,7 +35,7 @@ const initialForm = {
 };
 
 export default function DiscountPopup() {
-  const [open, setOpen] = useState(false);
+  const { open, openPopup, closePopup } = useDiscountPopup();
   const [form, setForm] = useState(initialForm);
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
@@ -44,9 +50,9 @@ export default function DiscountPopup() {
     } catch {
       // localStorage unavailable — still allow popup
     }
-    const timer = window.setTimeout(() => setOpen(true), SHOW_DELAY_MS);
+    const timer = window.setTimeout(() => openPopup(), SHOW_DELAY_MS);
     return () => window.clearTimeout(timer);
-  }, []);
+  }, [openPopup]);
 
   useEffect(() => {
     if (!open) return;
@@ -95,11 +101,12 @@ export default function DiscountPopup() {
   }
 
   function dismiss() {
-    setOpen(false);
+    closePopup();
     markSeen();
   }
 
   function onOverlayClick(event: React.MouseEvent<HTMLDivElement>) {
+    if (status === "submitting") return;
     if (event.target === event.currentTarget) dismiss();
   }
 
@@ -133,16 +140,24 @@ export default function DiscountPopup() {
           pageUrl: typeof window !== "undefined" ? window.location.href : ""
         })
       });
-      const data = (await response.json().catch(() => ({}))) as { ok?: boolean; error?: string };
-      if (!response.ok || !data.ok) {
-        throw new Error(data.error || "Something went wrong. Please try again.");
+      const data = (await response.json().catch(() => ({}))) as {
+        success?: boolean;
+        message?: string;
+        error?: string;
+      };
+      if (!response.ok || !data.success) {
+        const detail = data.error || data.message || GENERIC_ERROR;
+        if (isDev) console.error("[discount-lead] failed:", response.status, detail);
+        throw new Error(detail);
       }
+      if (isDev) console.log("[discount-lead] sent");
       setStatus("success");
       setForm(initialForm);
       markSeen();
     } catch (error) {
       setStatus("error");
-      setErrorMsg(error instanceof Error ? error.message : "Submission failed.");
+      const detail = error instanceof Error ? error.message : GENERIC_ERROR;
+      setErrorMsg(detail || GENERIC_ERROR);
     }
   }
 
@@ -178,8 +193,8 @@ export default function DiscountPopup() {
           {status === "success" ? (
             <div className="discount-success" role="status" aria-live="polite">
               <span className="discount-success-mark"><Sparkles size={28} aria-hidden="true" /></span>
-              <h2 id="discount-title">You&apos;re in.</h2>
-              <p>Thanks! Our team will reach out within one business day with your custom discounted quote.</p>
+              <h2 id="discount-title">Request received</h2>
+              <p>{SUCCESS_MESSAGE}</p>
               <button type="button" className="button primary" onClick={dismiss}>Close</button>
             </div>
           ) : (

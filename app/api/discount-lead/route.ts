@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 type LeadPayload = {
   name: string;
@@ -13,6 +14,7 @@ type LeadPayload = {
 };
 
 const REQUIRED_ENV = ["SMTP_HOST", "SMTP_PORT", "SMTP_USER", "SMTP_PASS"] as const;
+const isDev = process.env.NODE_ENV !== "production";
 
 function escapeHtml(value: string) {
   return value
@@ -23,12 +25,21 @@ function escapeHtml(value: string) {
     .replace(/'/g, "&#39;");
 }
 
+function safeError(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  if (typeof error === "string") return error;
+  return "Unknown error";
+}
+
 export async function POST(request: Request) {
   let body: LeadPayload;
   try {
     body = (await request.json()) as LeadPayload;
   } catch {
-    return NextResponse.json({ ok: false, error: "Invalid JSON body." }, { status: 400 });
+    return NextResponse.json(
+      { success: false, message: "Invalid JSON body." },
+      { status: 400 }
+    );
   }
 
   const name = (body.name || "").trim();
@@ -40,47 +51,55 @@ export async function POST(request: Request) {
 
   if (!name || !email || !phone || !service) {
     return NextResponse.json(
-      { ok: false, error: "Name, email, phone and service are required." },
+      { success: false, message: "Name, email, phone and service are required." },
       { status: 400 }
     );
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return NextResponse.json({ ok: false, error: "Invalid email address." }, { status: 400 });
+    return NextResponse.json(
+      { success: false, message: "Invalid email address." },
+      { status: 400 }
+    );
   }
   if (phone.replace(/\D/g, "").length < 7) {
-    return NextResponse.json({ ok: false, error: "Invalid phone number." }, { status: 400 });
+    return NextResponse.json(
+      { success: false, message: "Invalid phone number." },
+      { status: 400 }
+    );
   }
 
   const missing = REQUIRED_ENV.filter((key) => !process.env[key]);
   if (missing.length) {
+    if (isDev) console.error("[discount-lead] missing env:", missing.join(", "));
     return NextResponse.json(
       {
-        ok: false,
-        error:
-          "Email service is not configured. Set the SMTP_HOST, SMTP_PORT, SMTP_USER, and SMTP_PASS environment variables."
+        success: false,
+        message: "Email service is not configured.",
+        error: `Missing environment variables: ${missing.join(", ")}`
       },
       { status: 500 }
     );
   }
 
   const port = Number(process.env.SMTP_PORT);
+  const explicitSecure = process.env.SMTP_SECURE;
+  const secure = explicitSecure === "true" || (explicitSecure !== "false" && port === 465);
   const receiver = process.env.LEAD_RECEIVER_EMAIL || "info@austrowebnlogo.com";
   const from = process.env.SMTP_FROM || `Austro Web & Logo Leads <${process.env.SMTP_USER}>`;
+  const submittedAt = new Date().toISOString();
 
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port,
-    secure: port === 465,
+    secure,
     auth: {
       user: process.env.SMTP_USER as string,
       pass: process.env.SMTP_PASS as string
     }
   });
 
-  const submittedAt = new Date().toISOString();
-
   const textBody =
-    `New Discount Lead - Austro Web & Logo\n\n` +
+    `New Project / Discount Lead - Austro Web N Logo\n\n` +
     `Full Name: ${name}\n` +
     `Email: ${email}\n` +
     `Phone: ${phone}\n` +
@@ -91,7 +110,7 @@ export async function POST(request: Request) {
 
   const htmlBody = `
     <div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#101422">
-      <h2 style="margin:0 0 12px 0;color:#1f3bd6">New Discount Lead</h2>
+      <h2 style="margin:0 0 12px 0;color:#1f3bd6">New Project / Discount Lead</h2>
       <p style="margin:0 0 16px 0;color:#475063">A visitor submitted the discount popup on austrowebnlogo.com.</p>
       <table cellpadding="6" cellspacing="0" style="border-collapse:collapse;border:1px solid #e4e7ee">
         <tr><td style="background:#f5f7fb;font-weight:700">Full Name</td><td>${escapeHtml(name)}</td></tr>
@@ -110,13 +129,24 @@ export async function POST(request: Request) {
       from,
       to: receiver,
       replyTo: email,
-      subject: "New Discount Lead - Austro Web N Logo",
+      subject: "New Project / Discount Lead - Austro Web N Logo",
       text: textBody,
       html: htmlBody
     });
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ success: true, message: "Lead submitted successfully." });
   } catch (error) {
-    const detail = error instanceof Error ? error.message : "Unknown error";
-    return NextResponse.json({ ok: false, error: `Email send failed: ${detail}` }, { status: 502 });
+    const detail = safeError(error);
+    if (isDev) console.error("[discount-lead] sendMail failed:", detail);
+    return NextResponse.json(
+      { success: false, message: "Failed to send email.", error: detail },
+      { status: 502 }
+    );
   }
+}
+
+export function GET() {
+  return NextResponse.json(
+    { success: false, message: "Method not allowed. Use POST." },
+    { status: 405, headers: { Allow: "POST" } }
+  );
 }

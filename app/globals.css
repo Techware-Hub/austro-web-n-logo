@@ -468,7 +468,9 @@ p {
   padding: 0 18px;
   border: 1px solid var(--ink);
   border-radius: var(--radius);
+  font: inherit;
   font-weight: 850;
+  cursor: pointer;
 }
 
 .quote-link::before,

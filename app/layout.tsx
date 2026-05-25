@@ -10,6 +10,7 @@ import AosProvider from "./components/AosProvider";
 import CustomCursor from "./components/CustomCursor";
 import DiscountPopup from "./components/DiscountPopup";
 import InteractionLayer from "./components/InteractionLayer";
+import { PopupProvider } from "./components/PopupProvider";
 import SiteHeader from "./components/SiteHeader";
 import { contact, serviceMenuItems, site } from "./content";
 
@@ -83,6 +84,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en-AU">
       <body className={`${display.variable} ${body.variable}`}>
+        <PopupProvider>
         <AosProvider />
         <InteractionLayer />
         <CustomCursor />
@@ -171,6 +173,7 @@ s1.src='https://embed.tawk.to/697a7ffb435d921c378e8e99/1jg387rtb';
 s0.parentNode.insertBefore(s1,s0);
 })();`}
         </Script>
+        </PopupProvider>
       </body>
     </html>
   );

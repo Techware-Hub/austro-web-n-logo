@@ -7,11 +7,13 @@ import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, X } from "lucide-react";
 import logo from "../assets/images/logo/Austro Web-N-Logo-Header.png";
 import { navItems, serviceMenuItems } from "../content";
+import { useDiscountPopup } from "./PopupProvider";
 
 export default function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const { openPopup } = useDiscountPopup();
 
   useEffect(() => {
     setOpen(false);
@@ -26,6 +28,11 @@ export default function SiteHeader() {
   }, [open]);
 
   const closeDrawer = () => setOpen(false);
+
+  const handleStartProject = () => {
+    closeDrawer();
+    openPopup();
+  };
 
   return (
     <>
@@ -51,7 +58,7 @@ export default function SiteHeader() {
         )}
       </nav>
 
-      <Link href="/contact" className="quote-link">Start a Project</Link>
+      <button type="button" className="quote-link" onClick={handleStartProject}>Start a Project</button>
 
       <button
         type="button"
@@ -103,9 +110,9 @@ export default function SiteHeader() {
               </Link>
             )
           )}
-          <Link href="/contact" className="button primary nav-drawer-cta" onClick={closeDrawer}>
+          <button type="button" className="button primary nav-drawer-cta" onClick={handleStartProject}>
             Start a Project
-          </Link>
+          </button>
         </nav>
       </aside>
     </>
