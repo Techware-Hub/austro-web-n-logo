@@ -1,5 +1,5 @@
 export const contact = {
-  phone: "{{PHONE}}",
+  phone: "+61 468 042 205",
   email: "{{EMAIL}}",
   address: ["32 Attain Walk", "Roxburgh Park VIC 3064", "Australia"],
   hours: "Monday-Friday, 9:00am-6:00pm AEST"
