@@ -1,41 +1,65 @@
 import Link from "next/link";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, MessageCircle, Sparkles } from "lucide-react";
+import PageHero from "../components/PageHero";
 import { packages } from "../content";
 
 export const metadata = {
-  title: "Packages | Austro Web & Logo"
+  title: "Logo Design Packages & Pricing",
+  description:
+    "Compare Austro Web & Logo packages with exact logo design pricing, package names, features, and order CTAs from Logo Basic through Mascot design.",
+  alternates: { canonical: "/packages" }
 };
 
 export default function PackagesPage() {
   return (
     <main>
-      <section className="page-hero compact">
-        <p className="eyebrow">AUD pricing</p>
-        <h1>Fixed-Price Packages. No Surprises.</h1>
-        <p>Every package is fixed-price in Australian dollars, GST inclusive, with milestone payments and clear deliverables. Need something custom? We build those too.</p>
-      </section>
-      {packages.map((group) => (
-        <section className="package-section" key={group.group}>
-          <h2>{group.group}</h2>
-          <div className="package-grid">
-            {group.items.map(([name, price, desc, items]) => (
-              <article className="package-card" key={name as string}>
-                <div>
-                  <h3>{name}</h3>
-                  <p>{desc}</p>
-                </div>
-                <strong>{price}</strong>
-                <ul>
-                  {(items as string[]).map((item) => <li key={item}><Check size={16} />{item}</li>)}
-                </ul>
-              </article>
-            ))}
+      <PageHero
+        eyebrow="Flexible Pricing Packages"
+        heading="Borderline Pricing Plans for All Businesses."
+        intro="Select a package aligned with your business objectives and budget. Each package includes professional production, fast concepts, revisions, ownership rights, and dedicated designers."
+        primary={{ label: "Choose a Package", href: "#packages" }}
+        secondary={{ label: "Contact Us", href: "/contact" }}
+        image="/assets/services/logo-design/Premium%20Art%20Work.png"
+        imageAlt="Premium package and pricing design by Austro Web and Logo"
+      />
+
+      {packages.map((group, index) => (
+        <section className="packages-showcase" id={index === 0 ? "packages" : undefined} key={group.group}>
+          <div className="section-heading left" data-aos="fade-up">
+            <p className="eyebrow">Transparent pricing</p>
+            <h2>{group.group}</h2>
+            <p>{group.intro}</p>
+          </div>
+          <div className="packages-grid">
+            {group.items.map((item, index) => {
+              const recommended = item.name === "Logo Plus";
+              return (
+                <article className={`pricing-card ${recommended ? "recommended" : ""}`} key={item.name} data-aos="fade-up" data-aos-delay={String((index % 3) * 85)}>
+                  {recommended && <span className="recommended-badge"><Sparkles size={15} /> Recommended</span>}
+                  <div className="pricing-card-head">
+                    <h3>{item.name}</h3>
+                    <div className="package-price-row">
+                      <strong>{item.price}</strong>
+                      <span><s>{item.originalPrice}</s></span>
+                    </div>
+                  </div>
+                  <ul>
+                    {item.features.map((feature) => <li key={feature}><Check size={16} />{feature}</li>)}
+                  </ul>
+                  <div className="package-actions">
+                    <Link className="button primary" href="/contact">Order Now <ArrowRight size={18} /></Link>
+                    <Link className="button secondary contrast" href="/contact">Live Chat <MessageCircle size={17} /></Link>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </section>
       ))}
-      <section className="fine-print">
-        <h2>Fine Print</h2>
-        <p>All prices are in Australian dollars, GST inclusive. 50% deposit to begin work, with the balance due before launch or final delivery. Every project comes with full ownership of final files.</p>
+
+      <section className="cta newsletter-cta" data-aos="zoom-in">
+        <h2>Need help choosing a package?</h2>
+        <p>Tell us what you want to launch and we will recommend the logo package that fits your goals, style, and budget.</p>
         <Link className="button primary" href="/contact">Start with a free quote <ArrowRight size={18} /></Link>
       </section>
     </main>

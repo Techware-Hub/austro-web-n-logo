@@ -1,7 +1,9 @@
 import { contact } from "../content";
 
 export const metadata = {
-  title: "Terms & Conditions | Austro Web & Logo"
+  title: "Terms & Conditions",
+  description: "Read the Austro Web & Logo terms and conditions for website use, design services, payments, revisions, and intellectual property.",
+  alternates: { canonical: "/terms" }
 };
 
 export default function TermsPage() {
