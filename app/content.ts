@@ -6,9 +6,9 @@ export const site = {
 };
 
 export const contact = {
-  phone: "+61 468 060 941",
-  phoneTel: "+61468060941",
-  whatsapp: "https://wa.me/61468060941",
+  phone: "+61 468 042 205",
+  phoneTel: "+61468042205",
+  whatsapp: "https://wa.me/61468042205",
   email: "info@austrowebnlogo.com",
   address: ["Australia-wide digital design agency"],
   hours: "Monday-Friday, 9:00am-6:00pm"
